@@ -1,7 +1,45 @@
 import { FaSearch } from "react-icons/fa";
 import { BiChevronsRight } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 const BlogSideBar = () => {
+
+  const [categories, setCategories] = useState(null);
+  const [tags, setTags] = useState(null);
+  
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/blog/")
+      .then((response) => { 
+        if (response.data.categories && response.data.tags) {
+          setCategories(response.data.categories);
+          setTags(response.data.tags);
+        }})
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const sortBlogs = (blogs) => {
+    const sortedBlogs = blogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+    return sortedBlogs.slice(0, 3);
+  }
+
+  const [blogs, setBlogs] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/blog/")
+      .then((response) => { 
+        if (response.data.blogs) {
+          setBlogs(sortBlogs(response.data.blogs));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <>
       {/* blog search bar*/}
@@ -32,66 +70,29 @@ const BlogSideBar = () => {
           Popular Post
         </h2>
         <div className="pt-10">
-          <Link
-            to="/blog_details"
+          {blogs ? blogs.map((blog,index) => (
+            <Link
+            to={`/blog_details/${blog.id}`}
             className="flex items-center"
             data-aos="fade-up"
             data-aos-duration="1000"
+            key={index}
           >
             <img
-              src="/images/inner/details-post-1.jpg"
-              className=" mr-3 2xl:mr-5 "
+              src={`http://127.0.0.1:8000${blog.image}`}
+              className=" mr-3 2xl:mr-5 w-[70px] h-[70px] object-cover"
               alt=""
             />
             <div className="text-left">
               <h4 className="text-base 2xl:text-lg leading-6 text-[#101010] dark:text-white font-medium font-Garamond hover:underline underline-offset-4">
-                5 Discount Period every year for Valuable Clients
+                {blog.title}
               </h4>
               <p className="text-sm md:text-[13px] 2xl:text-sm leading-[26px] font-Lora text-gray dark:text-lightGray font-normal">
-                August 10, 2023
+                {blog.date}
               </p>
             </div>
           </Link>
-          <Link
-            to="/blog_details"
-            className="mt-5 md:mt-[30px] flex items-center"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-          >
-            <img
-              src="/images/inner/details-post-2.jpg"
-              className=" mr-3 2xl:mr-5 "
-              alt=""
-            />
-            <div className="text-left">
-              <h4 className="text-base 2xl:text-lg leading-6 text-[#101010] dark:text-white font-medium font-Garamond hover:underline underline-offset-4">
-                Pre Booking Benifits for the Traveller on our Hotel
-              </h4>
-              <p className="text-sm md:text-[13px] 2xl:text-sm leading-[26px] font-Lora text-gray dark:text-lightGray font-normal">
-                October 10, 2023
-              </p>
-            </div>
-          </Link>
-          <Link
-            to="/blog_details"
-            className="mt-5 md:mt-[30px] flex items-center"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-          >
-            <img
-              src="/images/inner/details-post-3.jpg"
-              className=" mr-3 2xl:mr-5 "
-              alt=""
-            />
-            <div className="text-left">
-              <h4 className="text-base 2xl:text-lg leading-6 text-[#101010] dark:text-white font-medium font-Garamond hover:underline underline-offset-4">
-                How to Book a Room online Step by Step Guide
-              </h4>
-              <p className="text-sm md:text-[13px] 2xl:text-sm leading-[26px] font-Lora text-gray dark:text-lightGray font-normal">
-                September 10, 2023
-              </p>
-            </div>
-          </Link>
+          )) : <p>Loading...</p>}
         </div>
       </div>
 
@@ -102,60 +103,17 @@ const BlogSideBar = () => {
         </h2>
         <div className="pt-10">
           <ul className=" " data-aos="fade-up" data-aos-duration="1000">
-            <li className="flex items-center group transition-all duration-300 border-b-[1px] cursor-pointer border-lightGray dark:border-gray pb-3 ">
+            {categories ? categories.map((category,index) => (
+              <li key={index} className="pt-3 flex items-center group transition-all duration-300 border-b-[1px] cursor-pointer border-lightGray dark:border-gray pb-3 ">
               <BiChevronsRight
                 size={16}
                 className="text-lightBlack dark:text-white group-hover:text-khaki mr-2"
               />
               <span className="text-sm xl:text-base 2xl:text-lg leading-[26px] text-lightBlack group-hover:text-khaki font-medium font-Garamond dark:text-white">
-                Luxury Hotels
+                {category.name}
               </span>
             </li>
-            <li className="flex items-center group transition-all duration-300 border-b-[1px] cursor-pointer border-lightGray dark:border-gray py-3">
-              <BiChevronsRight
-                size={16}
-                className="text-lightBlack dark:text-white group-hover:text-khaki mr-2"
-              />
-              <span className="text-sm xl:text-base 2xl:text-lg leading-[26px] text-lightBlack group-hover:text-khaki font-medium font-Garamond dark:text-white">
-                Restaurants
-              </span>
-            </li>
-            <li className="flex items-center group transition-all duration-300 border-b-[1px] cursor-pointer border-lightGray dark:border-gray py-3">
-              <BiChevronsRight
-                size={16}
-                className="text-lightBlack dark:text-white group-hover:text-khaki mr-2"
-              />
-              <span className="text-sm xl:text-base 2xl:text-lg leading-[26px] text-lightBlack group-hover:text-khaki font-medium font-Garamond dark:text-white">
-                SPA Center
-              </span>
-            </li>
-            <li className="flex items-center group transition-all duration-300 border-b-[1px] cursor-pointer border-lightGray dark:border-gray py-3">
-              <BiChevronsRight
-                size={16}
-                className="text-lightBlack dark:text-white group-hover:text-khaki mr-2"
-              />
-              <span className="text-sm xl:text-base 2xl:text-lg leading-[26px] text-lightBlack group-hover:text-khaki font-medium font-Garamond dark:text-white">
-                Health Club
-              </span>
-            </li>
-            <li className="flex items-center group transition-all duration-300 border-b-[1px] cursor-pointer border-lightGray dark:border-gray py-3">
-              <BiChevronsRight
-                size={16}
-                className="text-lightBlack dark:text-white group-hover:text-khaki mr-2"
-              />
-              <span className="text-sm xl:text-base 2xl:text-lg leading-[26px] text-lightBlack group-hover:text-khaki font-medium font-Garamond dark:text-white">
-                Industrial
-              </span>
-            </li>
-            <li className="flex items-center group transition-all duration-300 cursor-pointer pt-3">
-              <BiChevronsRight
-                size={16}
-                className="text-lightBlack dark:text-white group-hover:text-khaki mr-2"
-              />
-              <span className="text-sm xl:text-base 2xl:text-lg leading-[26px] text-lightBlack group-hover:text-khaki font-medium font-Garamond dark:text-white">
-                Uncategories
-              </span>
-            </li>
+            )) : <p>Loading...</p>}
           </ul>
         </div>
       </div>
@@ -166,31 +124,13 @@ const BlogSideBar = () => {
         </h2>
         <div className="pt-10 " data-aos="fade-up" data-aos-duration="1000">
           <div className="grid items-center grid-cols-2 md:grid-cols-1 2xl:grid-cols-2 gap-3 sm:gap-5  ">
-            <div className="px-2 sm:px-4 py-2 bg-white dark:bg-lightBlack hover:bg-khaki transition-all duration-300 group">
+            {tags ? tags.map((tag,index)=>(
+              <div key={index} className="px-2 sm:px-4 py-2 bg-white dark:bg-lightBlack hover:bg-khaki transition-all duration-300 group">
               <h1 className="text-sm sm:text-base leading-6 lg:leading-[30px] font-Garamond text-[#101010] dark:text-white font-medium  group-hover:text-white">
-                Luxury Hotel
+                {tag.name}
               </h1>
             </div>
-            <div className="px-2 sm:px-4 py-2 bg-white dark:bg-lightBlack hover:bg-khaki transition-all duration-300 group">
-              <h1 className="text-sm sm:text-base leading-6 lg:leading-[30px] font-Garamond text-[#101010] dark:text-white font-medium  group-hover:text-white">
-                Interior Design
-              </h1>
-            </div>
-            <div className="px-2 sm:px-4 py-2 bg-white dark:bg-lightBlack hover:bg-khaki transition-all duration-300 group">
-              <h1 className="text-sm sm:text-base leading-6 lg:leading-[30px] font-Garamond text-[#101010] dark:text-white font-medium  group-hover:text-white">
-                SPA Center
-              </h1>
-            </div>
-            <div className="px-2 sm:px-4 py-2 bg-white dark:bg-lightBlack hover:bg-khaki transition-all duration-300 group">
-              <h1 className="text-sm sm:text-base leading-6 lg:leading-[30px] font-Garamond text-[#101010] dark:text-white font-medium  group-hover:text-white">
-                Luxury Restaurant
-              </h1>
-            </div>
-            <div className="px-2 sm:px-4 py-2 bg-white dark:bg-lightBlack hover:bg-khaki transition-all duration-300 group">
-              <h1 className="text-sm sm:text-base leading-6 lg:leading-[30px] font-Garamond text-[#101010] dark:text-white font-medium  group-hover:text-white">
-                Luxury Hotel
-              </h1>
-            </div>
+            )): <p>Loading...</p>}
           </div>
         </div>
       </div>

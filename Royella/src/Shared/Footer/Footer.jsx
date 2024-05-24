@@ -2,9 +2,54 @@ import { IoIosCall } from "react-icons/io";
 import { IoLocationSharp } from "react-icons/io5";
 import Brand from "../../Components/Brand/Brand";
 import { BiEnvelope, BiLogoLinkedin } from "react-icons/bi";
-import { FaFacebookF, FaPinterestP, FaTwitter } from "react-icons/fa";
+import { FaFacebookF, FaTwitter } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useState,useEffect } from "react";
+import axios from "axios";
 const Footer = () => {
+
+  const [contact, setContact] = useState(null);
+  const [images, setImages] = useState(null)
+  const [imagesRandom, setImagesRandom] = useState(null)
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/contact/")
+      .then((response) => { 
+        if (response.data.contact) {
+          setContact(response.data.contact);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/images/")
+      .then((response) => { 
+        if (response.data.images) {
+          setImages(response.data.images);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    let randomImagesEffect = [];
+    if (images && images.length > 0) {
+      while (randomImagesEffect.length < 6) {
+        let random = Math.floor(Math.random() * images.length);
+        if (!randomImagesEffect.includes(images[random])) {
+          randomImagesEffect.push(images[random]);   
+        }
+      }
+      setImagesRandom(randomImagesEffect);
+    }
+  }, [images]);
+  
+
   return (
     <>
       <Brand />
@@ -13,7 +58,7 @@ const Footer = () => {
         <div className="bg-lightBlack   ">
           <div className="Container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 2xl:grid-cols-12 gap-5 lg:gap-3 xl:gap-5 2xl:gap-[30px] pt-14 lg:pt-[100px] ">
             {/* Footer Content one. */}
-            <div
+            {contact ? <div
               className="lg:mt-[-195px] lg:col-span-3 2xl:col-span-4 bg-[#272727]"
               data-aos="fade-up"
               data-aos-duration="1000"
@@ -30,52 +75,46 @@ const Footer = () => {
                         className="text-khaki w-5 h-5 mr-3 2xl:mr-4 "
                         size={14}
                       />
-                      +980 (1234) 567 220
+                      {contact.tel}
                     </p>
                     <p className="flex items-center text-lightGray font-Lora font-normal text-sm sm:text-base leading-[26px]">
                       <BiEnvelope
                         className="text-khaki w-5 h-5 mr-3 2xl:mr-4 "
                         size={14}
                       />
-                      example@yahoo.com
+                      {contact.email}
                     </p>
                     <p className="flex items-center text-lightGray font-Lora font-normal text-sm sm:text-base leading-[26px]">
                       <IoLocationSharp
                         className="text-khaki w-5 h-5 mr-3 2xl:mr-4 "
                         size={14}
                       />
-                      102/B New Elephant Rd <br />
-                      Dhaka - 1212
+                      {contact.location}
                     </p>
                   </div>
                 </div>
                 <div>
                   <ul className="flex space-x-3">
                     <li className="hover-animBg group transition-all duration-300  rounded-full border border-lightGray border-opacity-75 hover:border-khaki cursor-pointer w-[37px] h-[37px] grid items-center justify-center">
-                      <Link to="#" className="">
+                      <Link to="https://www.facebook.com/molengeek" className="">
                         <FaFacebookF className="text-lightGray text-opacity-75 group-hover:text-white group-hover:text-slateBlue-0 w-4 h-4 " />
                       </Link>
                     </li>
 
                     <li className="hover-animBg group transition-all duration-300  rounded-full border border-lightGray border-opacity-75 hover:border-khaki cursor-pointer w-[37px] h-[37px] grid items-center justify-center">
-                      <Link to="#">
+                      <Link to="https://twitter.com/molengeek">
                         <FaTwitter className="text-lightGray text-opacity-75 group-hover:text-white group-hover:text-slateBlue-0 w-4 h-4 " />
                       </Link>
                     </li>
                     <li className="hover-animBg group transition-all duration-300  rounded-full border border-lightGray border-opacity-75 hover:border-khaki cursor-pointer w-[37px] h-[37px] grid items-center justify-center">
-                      <Link to="#">
+                      <Link to="https://www.linkedin.com/company/molengeek/mycompany/">
                         <BiLogoLinkedin className="text-lightGray text-opacity-75 group-hover:text-white group-hover:text-slateBlue-0 w-4 h-4 " />
-                      </Link>
-                    </li>
-                    <li className="hover-animBg group transition-all duration-300  rounded-full border border-lightGray border-opacity-75 hover:border-khaki cursor-pointer w-[37px] h-[37px] grid items-center justify-center">
-                      <Link to="#">
-                        <FaPinterestP className="text-lightGray text-opacity-75 group-hover:text-white group-hover:text-slateBlue-0 w-4 h-4 " />
                       </Link>
                     </li>
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> : null}
             {/* footer content-2 */}
 
             <div
@@ -88,23 +127,21 @@ const Footer = () => {
               </h1>
               <div className="pt-[30px] pb-0 lg:py-[30px]">
                 <ul
-                  className="text-lightGray font-Lora font-normal text-sm sm:text-base leading-[26px] list-none hover:list-disc
-                 "
-                >
+                  className="text-lightGray font-Lora font-normal text-sm sm:text-base leading-[26px] list-none hover:list-disc">
                   <li className="hover:ml-[17px] md:hover:ml-[18px] transition-all duration-500 hover:text-khaki leading-[44px]">
-                    <Link to="#">About Hotel</Link>
+                    <Link to="/about">About Hotel</Link>
                   </li>
                   <li className="hover:ml-[17px] md:hover:ml-[18px] transition-all duration-500 hover:text-khaki leading-[44px]">
-                    <Link to="#">Rooms & Suites</Link>
+                    <Link to="/room">Rooms & Suites</Link>
                   </li>
                   <li className="hover:ml-[17px] md:hover:ml-[18px] transition-all duration-500 hover:text-khaki leading-[44px]">
-                    <Link to="#">Reservations</Link>
+                    <Link to="/contact">Reservations</Link>
                   </li>
                   <li className="hover:ml-[17px] md:hover:ml-[18px] transition-all duration-500 hover:text-khaki leading-[44px]">
-                    <Link to="#">News & Blogs</Link>
+                    <Link to="/blog">News & Blogs</Link>
                   </li>
                   <li className="hover:ml-[17px] md:hover:ml-[18px] transition-all duration-500 hover:text-khaki leading-[44px]">
-                    <Link to="#">Contact Us</Link>
+                    <Link to="/contact">Contact Us</Link>
                   </li>
                 </ul>
               </div>
@@ -120,12 +157,9 @@ const Footer = () => {
                 GALLERY
               </h1>
               <div className="grid grid-cols-3 gap-2 mt-[45px] w-[250px] sm:w-[300px] lg:w-full  content-center ">
-                <img src="/images/home-1/gallery-1.jpg" alt="" />
-                <img src="/images/home-1/gallery-2.jpg" alt="" />
-                <img src="/images/home-1/gallery-3.jpg" alt="" />
-                <img src="/images/home-1/gallery-4.jpg" alt="" />
-                <img src="/images/home-1/gallery-5.jpg" alt="" />
-                <img src="/images/home-1/gallery-6.jpg" alt="" />
+                {imagesRandom ? imagesRandom.map((image,index) => (
+                  <img key={index} src={`http://127.0.0.1:8000${image.image}`} alt="" />
+                )): <p>Loading</p>}
               </div>
             </div>
             {/* footer content-4 */}

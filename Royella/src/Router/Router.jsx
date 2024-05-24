@@ -29,8 +29,32 @@ import Blog from "../Pages/InnerPage/Blog";
 import BlogDetails from "../Pages/InnerPage/BlogDetails";
 import Contact from "../Pages/InnerPage/Contact";
 import ErrorPage from "../Shared/ErrorPage/ErrorPage";
-import HomeBO from "../BackOffice/HomeBO";
+
+
+// Home And Main BackOffice
+import HomeBO from "../BackOffice/Components/HomeBO/HomeBO";
 import MainBO from "../Main/MainBO";
+import CreateHome from "../BackOffice/Components/HomeBO/CreateHome/CreateHome";
+import UpdateHome from "../BackOffice/Components/HomeBO/UpdateHome/UpdateHome";
+import ContactBO from "../BackOffice/Components/ContactBO/ContactBO";
+import UpdateContact from "../BackOffice/Components/ContactBO/UpdateContact/UpdateContact";
+import FacilitiesBO from "../BackOffice/Components/FacilitiesBO/FacilitiesBO";
+import UpdateFacilities from "../BackOffice/Components/FacilitiesBO/UpdateFacilities/UpdateFacilities";
+import CreateFacilities from "../BackOffice/Components/FacilitiesBO/CreateFacilities/CreateFacilities";
+import UpdateServices from "../BackOffice/Components/FacilitiesBO/UpdateServices/UpdateServices";
+import HotelBO from "../BackOffice/Components/HotelBO/HotelBO";
+import UpdateHotel from '../BackOffice/Components/HotelBO/UpdateHotel/UpdateHotel';
+import EmployeesBO from "../BackOffice/Components/EmployeesBO/EmployeesBO";
+import UpdateManager from "../BackOffice/Components/EmployeesBO/UpdateManager/UpdateManager";
+import UpdateEmployees from "../BackOffice/Components/EmployeesBO/UpdateEmployees/UpdateEmployees";
+import CreateEmployees from "../BackOffice/Components/EmployeesBO/CreateEmployees/CreateEmployees";
+import FaqBO from "../BackOffice/Components/FaqBO/FaqBO";
+import CreateFAQ from "../BackOffice/Components/FaqBO/CreateFAQ/CreateFAQ";
+import BlogBO from "../BackOffice/Components/BlogBO/BlogBO";
+import CreateBlog from "../BackOffice/Components/BlogBO/CreateBlog/CreateBlog";
+import TestimonialBO from "../BackOffice/Components/TestimonialBO/TestimonialBO";
+import CreateTestimonial from "../BackOffice/Components/TestimonialBO/CreateTestimonial/CreateTestimonial";
+import UsersBO from "../BackOffice/Components/UsersBO/UsersBO";
 
 // Starting React Router.
 const router = createBrowserRouter([
@@ -64,7 +88,7 @@ const router = createBrowserRouter([
         element: <Services />,
       },
       {
-        path: "/service_details",
+        path: "/service_details/:id",
         element: <ServiceDetails />,
       },
       {
@@ -80,16 +104,12 @@ const router = createBrowserRouter([
         element: <Blog />,
       },
       {
-        path: "/blog_details",
+        path: "/blog_details/:id",
         element: <BlogDetails />,
       },
       {
         path: "/contact",
         element: <Contact />,
-      },
-      {
-        path: "/backoffice",
-        element: <HomeBO />,
       }
     ],
   },
@@ -102,6 +122,90 @@ const router = createBrowserRouter([
         path: "/backoffice",
         element: <HomeBO />,
       },
+      {
+        path: "/backoffice/banner/add",
+        element: <CreateHome />,
+      },
+      {
+        path: "/backoffice/banner/update/:id",
+        element: <UpdateHome />,
+      },
+      {
+        path : "/backoffice/contact",
+        element : <ContactBO/>
+      },
+      {
+        path : "/backoffice/contact/update",
+        element : <UpdateContact/>
+      },
+      {
+        path : "/backoffice/facilities",
+        element : <FacilitiesBO/>
+      },
+      {
+        path : "/backoffice/facilities/update/:id",
+        element : <UpdateFacilities/>
+      },
+      {
+        path : '/backoffice/facilities/add',
+        element : <CreateFacilities/>
+      },
+      {
+        path : '/backoffice/facilities/services/update/:id',
+        element : <UpdateServices/>
+      },
+      {
+        path : '/backoffice/hotel',
+        element : <HotelBO/>
+      },
+      {
+        path : '/backoffice/hotel/update',
+        element : <UpdateHotel/>
+      },
+      {
+        path : '/backoffice/employees',
+        element : <EmployeesBO/>
+      },
+      {
+        path : '/backoffice/employees/manager/update/:id',
+        element : <UpdateManager/>
+      },
+      {
+        path : '/backoffice/employees/update/:id',
+        element : <UpdateEmployees/>
+      },
+      {
+        path : '/backoffice/employees/add',
+        element : <CreateEmployees/>
+      },
+      {
+        path : '/backoffice/faq',
+        element : <FaqBO/>
+      },
+      {
+        path : '/backoffice/faq/add',
+        element : <CreateFAQ/>
+      },
+      {
+        path : '/backoffice/blog',
+        element : <BlogBO/>
+      },
+      {
+        path : '/backoffice/blog/add',
+        element : <CreateBlog/>
+      },
+      {
+        path : '/backoffice/testimonials',
+        element : <TestimonialBO/>
+      },
+      {
+        path : '/backoffice/testimonials/add',
+        element : <CreateTestimonial/>
+      },
+      {
+        path : '/backoffice/users',
+        element : <UsersBO/>
+      }
     ],
   },
   // second homepage

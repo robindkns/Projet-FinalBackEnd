@@ -25,8 +25,7 @@ const RoomDetails = () => {
         if (response.data.rooms) {
           let rooms = response.data.rooms;
           setRoom(rooms.filter(room => room.id == id)[0]);
-        }
-      })
+        }})
       .catch((error) => {
         console.log(error);
       });
@@ -37,7 +36,6 @@ const RoomDetails = () => {
       .then((response) => {
         if (response.data.amenities) {
           let amenitiesFct = response.data.amenities;
-          console.log(room.amenities); 
           getAmenities(room.amenities, amenitiesFct); 
         }
       })
@@ -46,7 +44,9 @@ const RoomDetails = () => {
       });
   }, [room]);
 
-  // Template datas
+  // TEMPLATE DATAS
+
+
   // const [imageIndex, setImageIndex] = useState(0);
   const location = useLocation();
   const bookingsData = location.state && location.state;
@@ -111,7 +111,7 @@ const RoomDetails = () => {
               <img
                 src={`http://127.0.0.1:8000${room.image}`}
                 alt=""
-                className="transition-all duration-500 room-details-img"
+                className="transition-all duration-500 room-details-img2"
               />
               {/* <div className="flex ">
                 <span

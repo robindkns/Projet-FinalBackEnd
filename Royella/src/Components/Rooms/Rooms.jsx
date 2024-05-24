@@ -19,7 +19,7 @@ const Rooms = () => {
     axios.get("http://127.0.0.1:8000/api/rooms/")
       .then((response) => { 
         if (response.data.rooms) {
-          setRooms(response.data.rooms);  
+          setRooms(response.data.rooms);
         }
       })
       .catch((error) => {
@@ -39,6 +39,8 @@ const Rooms = () => {
       setRoomsRandom(randomRoomsEffect);
     }
   }, [rooms]);
+
+  // TEMPLATE DATA
 
   // const [open, setOpen] = useState(false);
   // const [guestOpen, setGuestOpen] = useState(false);
@@ -75,8 +77,6 @@ const Rooms = () => {
     {
       rooms ?
       <div className="bg-whiteSmoke dark:bg-lightBlack">
-      <div className="relative z-[1] ">
-      </div>
       {/* Rooms section heading */}
       <div className=" py-20 2xl:py-[120px] w-full bg-[url('/images/home-1/section-shape2.png')] bg-no-repeat bg-top bg-opacity-[0.07]">
         <div className="Container ">

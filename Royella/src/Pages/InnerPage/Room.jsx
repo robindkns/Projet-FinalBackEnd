@@ -8,8 +8,39 @@ import "keen-slider/keen-slider.min.css";
 import { IoIosCall } from "react-icons/io";
 import { MdEmail, MdOutlineShareLocation } from "react-icons/md";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const Room = () => {
+
+  const [rooms, setRooms] = useState(null);
+  const [contact, setContact] = useState(null)
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/rooms/")
+      .then((response) => { 
+        if (response.data.rooms) {
+          setRooms(response.data.rooms);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/contact/")
+      .then((response) => { 
+        if (response.data.contact) {
+          setContact(response.data.contact);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  // TEMPLATE DATA
   // facilities slider breckpoints
   const [sliderRef] = useKeenSlider({
     breakpoints: {
@@ -69,8 +100,9 @@ const Room = () => {
           {/* Rooms Slider Container */}
 
           <div className="mt-14 2xl:mt-[60px] grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-[30px]">
-            {/* Room - 1 */}
-            <div
+            {rooms ? rooms.map((room, index) => (
+              <>
+              <div key={index}
               className="overflow-x-hidden 3xl:w-[410px] group"
               data-aos="fade-up"
               data-aos-duration="1000"
@@ -78,18 +110,18 @@ const Room = () => {
               <div className="relative">
                 <div className="overflow-hidden">
                   <img
-                    src="/images/inner/roms-1.jpg"
+                    src={`http://127.0.0.1:8000${room.image}`}
                     className="w-full h-full object-cover group-group-hover:scale-110 transition-all duration-300"
                     alt=""
                   />
                 </div>
                 <div className="px-5 3xl:px-6 py-2 inline-flex bg-khaki text-sm  items-center justify-center text-white  absolute top-[10px] right-[10px] ">
-                  <span className="">$450</span>
+                  <span className="">${room.price}</span>
                   <span className="mx-2">|</span>
                   <span>Night</span>
                 </div>
 
-                <Link to={"/room_details"}>
+                <Link to={`/room_details/${room.id}`}>
                   <button className="flex items-center justify-center text-[15px] leading-[38px] bg-khaki  absolute bottom-0 -left-40 px-6 py-1 text-white  group-hover:left-0 transition-all duration-300">
                     View Details{" "}
                     <BsArrowRight className="w-4 h-4 ml-2  text-white" />{" "}
@@ -107,11 +139,11 @@ const Room = () => {
                       state={{ price: "450", title: "Delux Family Rooms" }}
                     >
                       <h2 className="text-2xl lg:text-[24px] xl:text-[28px] leading-[26px] font-semibold text-lightBlack dark:text-white py-4">
-                        Delux Family Rooms
+                        {room.title}
                       </h2>
                     </Link>
                     <p className="text-sm font-normal text-gray  dark:text-lightGray font-Lora">
-                      1500 SQ.FT/Rooms
+                      {room.size} SQ.FT/Rooms
                     </p>
                   </div>
                   <div className="  border-t-[1px] border-[#e8e8e8] dark:border-[#424242]  py-5">
@@ -123,438 +155,25 @@ const Room = () => {
                             alt=""
                           />
                           <span className="ml-[10px] text-gray dark:text-lightGray">
-                            2 King Bed
+                            {room.beds} King Beds
                           </span>
                         </span>
                       </div>
                       <span className="w-[1px] h-[25px] bg-[#ddd] dark:bg-gray"></span>
                       <ul className="flex items-center text-khaki space-x-[5px]">
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
+                        {Array.from({ length: room.rating }, (_, i) => (
+                            <li key={i}>
+                              <FaStar />
+                            </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Room - 2 */}
-            <div
-              className="overflow-x-hidden 3xl:w-[410px] group"
-              data-aos="fade-up"
-              data-aos-duration="1000"
-            >
-              <div className="relative">
-                <div className="overflow-hidden">
-                  <img
-                    src="/images/inner/room-2.jpg "
-                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-300"
-                    alt=""
-                  />
-                </div>
-                <div className="px-5 3xl:px-6 py-2 inline-flex bg-khaki text-sm  items-center justify-center text-white  absolute top-[10px] right-[10px] ">
-                  <span className="">$550</span>
-                  <span className="mx-2">|</span>
-                  <span>Night</span>
-                </div>
-                <Link to={"/room_details"}>
-                  <button className="flex items-center justify-center text-[15px] leading-[38px] bg-khaki  absolute bottom-0 -left-40 px-6 py-1 text-white  group-hover:left-0 transition-all duration-300">
-                    View Details{" "}
-                    <BsArrowRight className="w-4 h-4 ml-2  text-white" />{" "}
-                  </button>
-                </Link>
-              </div>
-              <div className="font-Garamond">
-                <div className=" border-[1px] border-[#e8e8e8] dark:border-[#424242]  border-t-0">
-                  <div className="py-6 px-[30px]">
-                    <h4 className="text-sm leading-[26px] text-khaki uppercase font-semibold">
-                      Luxury Room
-                    </h4>
-                    <Link
-                      to="/find_room"
-                      state={{ price: "550", title: "Double Suite Rooms" }}
-                    >
-                      <h2 className="text-2xl lg:text-[24px] xl:text-[28px] leading-[26px] font-semibold text-lightBlack dark:text-white py-4">
-                        Double Suite Rooms
-                      </h2>
-                    </Link>
-                    <p className="text-sm font-normal text-gray  dark:text-lightGray font-Lora">
-                      1500 SQ.FT/Rooms
-                    </p>
-                  </div>
-                  <div className="  border-t-[1px] border-[#e8e8e8] dark:border-[#424242]  py-5">
-                    <div className="px-[30px] flex items-center justify-between">
-                      <div className="">
-                        <span className="font-Lora text-base flex items-center ">
-                          <img
-                            src="/images/home-1/room-bottom-icon.png"
-                            alt=""
-                          />
-                          <span className="ml-[10px] text-gray dark:text-lightGray">
-                            2 King Bed
-                          </span>
-                        </span>
-                      </div>
-                      <span className="w-[1px] h-[25px] bg-[#ddd] dark:bg-gray"></span>
-                      <ul className="flex items-center text-khaki space-x-[5px]">
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Room - 3 */}
-            <div
-              className="overflow-x-hidden 3xl:w-[410px] group"
-              data-aos="fade-up"
-              data-aos-duration="1000"
-            >
-              <div className="relative">
-                <div className="overflow-hidden">
-                  <img
-                    src="/images/inner/room-3.jpg "
-                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-300"
-                    alt=""
-                  />
-                </div>
-                <div className="px-5 3xl:px-6 py-2 inline-flex bg-khaki text-sm  items-center justify-center text-white  absolute top-[10px] right-[10px] ">
-                  <span className="">$560</span>
-                  <span className="mx-2">|</span>
-                  <span>Night</span>
-                </div>
-                <Link to={"/room_details"}>
-                  <button className="flex items-center justify-center text-[15px] leading-[38px] bg-khaki  absolute bottom-0 -left-40 px-6 py-1 text-white  group-hover:left-0 transition-all duration-300">
-                    View Details{" "}
-                    <BsArrowRight className="w-4 h-4 ml-2  text-white" />{" "}
-                  </button>
-                </Link>
-              </div>
-              <div className="font-Garamond">
-                <div className=" border-[1px] border-[#e8e8e8] dark:border-[#424242]  border-t-0">
-                  <div className="py-6 px-[30px]">
-                    <h4 className="text-sm leading-[26px] text-khaki uppercase font-semibold">
-                      Luxury Room
-                    </h4>
-                    <Link
-                      to="/find_room"
-                      state={{ price: "560", title: "Suprior Bed Rooms" }}
-                    >
-                      <h2 className="text-2xl lg:text-[24px] xl:text-[28px] leading-[26px] font-semibold text-lightBlack dark:text-white py-4">
-                        Suprior Bed Rooms
-                      </h2>
-                    </Link>
-                    <p className="text-sm font-normal text-gray  dark:text-lightGray font-Lora">
-                      1500 SQ.FT/Rooms
-                    </p>
-                  </div>
-                  <div className="  border-t-[1px] border-[#e8e8e8] dark:border-[#424242]  py-5">
-                    <div className="px-[30px] flex items-center justify-between">
-                      <div className="">
-                        <span className="font-Lora text-base flex items-center ">
-                          <img
-                            src="/images/home-1/room-bottom-icon.png"
-                            alt=""
-                          />
-                          <span className="ml-[10px] text-gray dark:text-lightGray">
-                            2 King Bed
-                          </span>
-                        </span>
-                      </div>
-                      <span className="w-[1px] h-[25px] bg-[#ddd] dark:bg-gray"></span>
-                      <ul className="flex items-center text-khaki space-x-[5px]">
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Room - 4 */}
-            <div
-              className="overflow-x-hidden 3xl:w-[410px] group"
-              data-aos="fade-up"
-              data-aos-duration="1000"
-            >
-              <div className="relative">
-                <div className="overflow-hidden">
-                  <img
-                    src="/images/home-1/room-1.jpg "
-                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-300"
-                    alt=""
-                  />
-                </div>
-                <div className="px-5 3xl:px-6 py-2 inline-flex bg-khaki text-sm  items-center justify-center text-white  absolute top-[10px] right-[10px] ">
-                  <span className="">$480</span>
-                  <span className="mx-2">|</span>
-                  <span>Night</span>
-                </div>
-                <Link to={"/room_details"}>
-                  <button className="flex items-center justify-center text-[15px] leading-[38px] bg-khaki  absolute bottom-0 -left-40 px-6 py-1 text-white  group-hover:left-0 transition-all duration-300">
-                    View Details{" "}
-                    <BsArrowRight className="w-4 h-4 ml-2  text-white" />{" "}
-                  </button>
-                </Link>
-              </div>
-              <div className="font-Garamond">
-                <div className=" border-[1px] border-[#e8e8e8] dark:border-[#424242]  border-t-0">
-                  <div className="py-6 px-[30px]">
-                    <h4 className="text-sm leading-[26px] text-khaki uppercase font-semibold">
-                      Luxury Room
-                    </h4>
-                    <Link
-                      to="/find_room"
-                      state={{ price: "480", title: "Junior Suite Room" }}
-                    >
-                      <h2 className="text-2xl lg:text-[24px] xl:text-[28px] leading-[26px] font-semibold text-lightBlack dark:text-white py-4">
-                        Junior Suite Room
-                      </h2>
-                    </Link>
-                    <p className="text-sm font-normal text-gray  dark:text-lightGray font-Lora">
-                      1500 SQ.FT/Rooms
-                    </p>
-                  </div>
-                  <div className="  border-t-[1px] border-[#e8e8e8] dark:border-[#424242]  py-5">
-                    <div className="px-[30px] flex items-center justify-between">
-                      <div className="">
-                        <span className="font-Lora text-base flex items-center ">
-                          <img
-                            src="/images/home-1/room-bottom-icon.png"
-                            alt=""
-                          />
-                          <span className="ml-[10px] text-gray dark:text-lightGray">
-                            2 King Bed
-                          </span>
-                        </span>
-                      </div>
-                      <span className="w-[1px] h-[25px] bg-[#ddd] dark:bg-gray"></span>
-                      <ul className="flex items-center text-khaki space-x-[5px]">
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Room - 5 */}
-            <div
-              className="overflow-x-hidden 3xl:w-[410px] group"
-              data-aos="fade-up"
-              data-aos-duration="1000"
-            >
-              <div className="relative">
-                <div className="overflow-hidden">
-                  <img
-                    src="/images/home-1/room-2.jpg "
-                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-300"
-                    alt=""
-                  />
-                </div>
-                <div className="px-5 3xl:px-6 py-2 inline-flex bg-khaki text-sm  items-center justify-center text-white  absolute top-[10px] right-[10px] ">
-                  <span className="">$520</span>
-                  <span className="mx-2">|</span>
-                  <span>Night</span>
-                </div>
-                <Link to={"/room_details"}>
-                  <button className="flex items-center justify-center text-[15px] leading-[38px] bg-khaki  absolute bottom-0 -left-40 px-6 py-1 text-white  group-hover:left-0 transition-all duration-300">
-                    View Details{" "}
-                    <BsArrowRight className="w-4 h-4 ml-2  text-white" />{" "}
-                  </button>
-                </Link>
-              </div>
-              <div className="font-Garamond">
-                <div className=" border-[1px] border-[#e8e8e8] dark:border-[#424242]  border-t-0">
-                  <div className="py-6 px-[30px]">
-                    <h4 className="text-sm leading-[26px] text-khaki uppercase font-semibold">
-                      Luxury Room
-                    </h4>
-                    <Link
-                      to="/find_room"
-                      state={{ price: "520", title: "Family Suite Room" }}
-                    >
-                      <h2 className="text-2xl lg:text-[24px] xl:text-[28px] leading-[26px] font-semibold text-lightBlack dark:text-white py-4">
-                        Family Suite Room
-                      </h2>
-                    </Link>
-                    <p className="text-sm font-normal text-gray  dark:text-lightGray font-Lora">
-                      1500 SQ.FT/Rooms
-                    </p>
-                  </div>
-                  <div className="  border-t-[1px] border-[#e8e8e8] dark:border-[#424242]  py-5">
-                    <div className="px-[30px] flex items-center justify-between">
-                      <div className="">
-                        <span className="font-Lora text-base flex items-center ">
-                          <img
-                            src="/images/home-1/room-bottom-icon.png"
-                            alt=""
-                          />
-                          <span className="ml-[10px] text-gray dark:text-lightGray">
-                            2 King Bed
-                          </span>
-                        </span>
-                      </div>
-                      <span className="w-[1px] h-[25px] bg-[#ddd] dark:bg-gray"></span>
-                      <ul className="flex items-center text-khaki space-x-[5px]">
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Room - 6 */}
-            <div
-              className="overflow-x-hidden 3xl:w-[410px] group"
-              data-aos="fade-up"
-              data-aos-duration="1000"
-            >
-              <div className="relative">
-                <div className="overflow-hidden">
-                  <img
-                    src="/images/home-1/room-3.jpg "
-                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-300"
-                    alt=""
-                  />
-                </div>
-                <div className="px-5 3xl:px-6 py-2 inline-flex bg-khaki text-sm  items-center justify-center text-white  absolute top-[10px] right-[10px] ">
-                  <span className="">$500</span>
-                  <span className="mx-2">|</span>
-                  <span>Night</span>
-                </div>
-               <Link to={"/room_details"}>
-                  <button className="flex items-center justify-center text-[15px] leading-[38px] bg-khaki  absolute bottom-0 -left-40 px-6 py-1 text-white  group-hover:left-0 transition-all duration-300">
-                    View Details{" "}
-                    <BsArrowRight className="w-4 h-4 ml-2  text-white" />{" "}
-                  </button>
-                </Link>
-              </div>
-              <div className="font-Garamond">
-                <div className=" border-[1px] border-[#e8e8e8] dark:border-[#424242]  border-t-0">
-                  <div className="py-6 px-[30px]">
-                    <h4 className="text-sm leading-[26px] text-khaki uppercase font-semibold">
-                      Luxury Room
-                    </h4>
-                    <Link
-                      to="/find_room"
-                      state={{ price: "500", title: "Beautiful Family Rooms" }}
-                    >
-                      <h2 className="text-2xl lg:text-[24px] xl:text-[28px] leading-[26px] font-semibold text-lightBlack dark:text-white py-4">
-                        Beautiful Family Rooms
-                      </h2>
-                    </Link>
-                    <p className="text-sm font-normal text-gray  dark:text-lightGray font-Lora">
-                      1500 SQ.FT/Rooms
-                    </p>
-                  </div>
-                  <div className="  border-t-[1px] border-[#e8e8e8] dark:border-[#424242]  py-5">
-                    <div className="px-[30px] flex items-center justify-between">
-                      <div className="">
-                        <span className="font-Lora text-base flex items-center ">
-                          <img
-                            src="/images/home-1/room-bottom-icon.png"
-                            alt=""
-                          />
-                          <span className="ml-[10px] text-gray dark:text-lightGray">
-                            2 King Bed
-                          </span>
-                        </span>
-                      </div>
-                      <span className="w-[1px] h-[25px] bg-[#ddd] dark:bg-gray"></span>
-                      <ul className="flex items-center text-khaki space-x-[5px]">
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                        <li>
-                          <FaStar />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </>
+            )) : <p>Loading...</p>}
           </div>
         </div>
       </div>
@@ -715,7 +334,7 @@ const Room = () => {
                 stand-alone
               </p>
 
-              {/* call */}
+              {contact ? <>
               <div className="flex items-center my-4  lg:my-[26px] group">
                 <div className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] lg:w-[50px] lg:h-[50px] 2xl:w-[60px] 2xl:h-[60px] bg-white group-hover:bg-khaki dark:group-hover:bg-khaki grid items-center justify-center rounded-full transition-all duration-300">
                   <IoIosCall
@@ -728,12 +347,11 @@ const Room = () => {
                     Call Us Now
                   </p>
                   <p className="font-Garamond text-lg sm:text-xl md:text-[22px] leading-[26px] text-lightBlack  font-medium">
-                    +980 123 (4567) 890
+                    {contact.tel}
                   </p>
                 </div>
               </div>
               <hr className="dark:text-gray dark:bg-gray text-lightGray bg-lightGray h-[1px]" />
-              {/* email */}
               <div className="flex items-center my-4  lg:my-[26px] group">
                 <div className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] lg:w-[50px] lg:h-[50px] 2xl:w-[60px] 2xl:h-[60px] bg-white group-hover:bg-khaki dark:group-hover:bg-khaki grid items-center justify-center rounded-full transition-all duration-300">
                   <MdEmail
@@ -746,12 +364,11 @@ const Room = () => {
                     Send Email
                   </p>
                   <p className="font-Garamond text-lg sm:text-xl md:text-[22px] leading-[26px] text-lightBlack  font-medium ">
-                    example@gmail.com
+                    {contact.email}
                   </p>
                 </div>
               </div>
               <hr className="dark:text-gray dark:bg-gray text-lightGray bg-lightGray h-[1px]" />
-              {/* location */}
               <div className="flex items-center my-4  lg:my-[26px] group">
                 <div className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] lg:w-[50px] lg:h-[50px] 2xl:w-[60px] 2xl:h-[60px] bg-white group-hover:bg-khaki dark:group-hover:bg-khaki grid items-center justify-center rounded-full transition-all duration-300">
                   <MdOutlineShareLocation
@@ -764,11 +381,11 @@ const Room = () => {
                     Our Locations
                   </p>
                   <p className="font-Garamond text-lg sm:text-xl md:text-[22px] leading-[26px] text-lightBlack  font-medium ">
-                    New elephant Road, Dhanmondi <br />
-                    Dhaka - 1212
+                    {contact.location}
                   </p>
                 </div>
               </div>
+              </> : <p>Loading...</p>}
             </div>
             <div
               className="flex-1 py-5 sm:p-5"

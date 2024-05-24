@@ -1,7 +1,7 @@
 from rooms.models import *
 from django_seed import Seed
 
-def run():
+def run_rooms():
     seed = Seed.seeder()
     
     # amenity = [

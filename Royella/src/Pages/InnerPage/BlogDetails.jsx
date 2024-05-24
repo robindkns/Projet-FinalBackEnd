@@ -1,21 +1,89 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import BreadCrumb from "../../BreadCrumb/BreadCrumb";
 import BlogSideBar from "./BlogSideBar";
 import { BiChevronsRight } from "react-icons/bi";
+import { useEffect,useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const BlogDetails = () => {
-  const location = useLocation();
-  const blogData = location.state && location.state;
+
+  const getTags = (blog, tags) => {
+    const filteredTags = tags.filter(item => blog.tag.includes(item.id));
+    return filteredTags
+  }
+
+  const getComments = (blog, comments) => {
+    const filteredComments = []
+    comments.forEach(element => {
+      if (element.blog == blog.id) {
+        filteredComments.push(element);
+      }
+    });
+    console.log(filteredComments); 
+    return filteredComments
+  }
+
+  const [blog, setBlog] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [comments, setComments] = useState(null);
+  const [tags, setTags] = useState(null);
+  const { id } = useParams()
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/blog/")
+      .then((response) => { 
+        if (response.data.blogs && response.data.categories && response.data.comments) {
+          let blogs = response.data.blogs;
+          setCategories(response.data.categories);
+          setBlog(blogs.filter(blog => blog.id == id)[0]); 
+        }})
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/blog/")
+      .then((response) => { 
+        if (response.data.tags) {
+          setTags(response.data.tags);
+          setTags(getTags(blog, tags));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [blog]);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/blog/")
+      .then((response) => { 
+        if (response.data.comments) {
+          setComments(response.data.comments);
+          setComments(getComments(blog, comments));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [blog]);
+
+  //TEMPLATE DATA 
+  // const location = useLocation();
+  // const blogData = location.state && location.state;
 
   return (
-    <div>
+    <>
+      {blog ? <>
+        <div>
       <BreadCrumb title="Blog Details" />
       {/* Blog Details */}
       <div className="dark:bg-lightBlack py-20 2xl:py-[120px]">
         <div className="Container grid grid-cols-6 md:grid-cols-7 lg:grid-cols-6 gap-5 ">
           <div className="col-span-6 md:col-span-4">
             <img
-              src="/images/inner/blog-details.jpg"
+              src={`http://127.0.0.1:8000${blog.image}`}
               alt=""
               data-aos="fade-up"
               data-aos-duration="1000"
@@ -24,29 +92,14 @@ const BlogDetails = () => {
             <div className="pt-5 lg:pt-[35px]  pr-3">
               <div data-aos="fade-up" data-aos-duration="1000">
                 <p className="text-base font-Garamond text-gray dark:text-lightGray">
-                  <span>August 10, 2023 </span> <span className="mx-2">/</span>
-                  <span> LUXURY HOTEL</span>
+                  <span>{blog.date}</span> <span className="mx-2">/</span>
+                  <span style={{ textTransform: "uppercase" }}>{categories[categories.findIndex(category => category.id === blog.category)].name}</span>
                 </p>
                 <h2 className="py-2 sm:py-3 md:py-4 lg:py-[19px] 2xl:py-[25px] font-Garamond text-[22px] sm:text-2xl md:text-3xl lg:text-4xl 2xl:text-[38px] 3xl:text-[40px] leading-6 lg:leading-[26px]  text-lightBlack dark:text-white font-semibold">
-                  {blogData && blogData.title
-                    ? blogData.title
-                    : "Luxury Hotel for Travelling Spot California, USA"}
+                  {blog.title}
                 </h2>
                 <p className="text-sm lg:text-base leading-6 text-gray dark:text-lightGray font-normal font-Lora">
-                  Rapidiously myocardinate cross-platform intellectual capital
-                  after marketing model. Appropriately create interactive
-                  infrastructures after maintainable are Holisticly facilitate
-                  stand-alone inframe extend state of the art benefits via
-                  web-enabled value. Completely fabricate extensible
-                  infomediaries rather than reliable e-services. Dramatically
-                  whiteboard alternative
-                </p>
-                <p className="mt-5 2xl:mt-7 text-sm lg:text-base leading-6 text-gray dark:text-lightGray font-normal font-Lora">
-                  Conveniently fashion pandemic potentialities for team driven
-                  technologies. Proactively orchestrate robust systems rather
-                  than user-centric vortals. Distinctively seize top-line
-                  e-commerce with premier intellectual capital. Efficiently
-                  strategize goal-oriented
+                  {blog.text}
                 </p>
               </div>
 
@@ -132,12 +185,12 @@ const BlogDetails = () => {
                   <h5 className="text-lg text-[#101010] dark:text-white leading-[28px] font-semibold font-Garamond mr-2">
                     Tags :
                   </h5>
-                  <span className="text-sm border-[1px] border-lightGray dark:border-gray px-3 py-1 dark:text-white">
-                    SPA Center
-                  </span>
-                  <span className="text-sm border-[1px] border-lightGray dark:border-gray px-3 py-1 dark:text-white">
-                    Luxury
-                  </span>
+                  {tags ? tags.map((item,index) => (
+                    <span key={index} className="text-sm border-[1px] border-lightGray dark:border-gray px-3 py-1 dark:text-white">
+                      {item.name}
+                    </span>
+                  )) : <p>Loading...</p>}
+                  
                 </div>
                 {/* social Link */}
                 <div className="flex items-center space-x-2 mt-3 lg:mt-0">
@@ -189,7 +242,7 @@ const BlogDetails = () => {
                         How to Book a Room Online Step by Step Guide
                       </h4>
                       <p className="text-sm md:text-[13px] 2xl:text-sm leading-[26px] font-Lora text-gray dark:text-lightGray font-normal">
-                        August 10, 2023
+                        August 10, 2023 
                       </p>
                     </div>
                   </Link>
@@ -220,19 +273,20 @@ const BlogDetails = () => {
                 </div>
               </div>
               {/* Comment Section */}
-              <div className="my-10 2xl:my-[60px] 3xl:my-[80px]">
-                <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-[32px] text-lightBlack dark:text-white font-semibold font-Garamond mb-5 2xl:mb-[30px]">
-                  ‘2’ Comments
-                </h3>
+              <h3 className="pt-10 text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-[32px] text-lightBlack dark:text-white font-semibold font-Garamond mb-5 2xl:mb-[30px]">
+                  ‘{comments.length}’ Comments
+              </h3>
+              {comments ? comments.map((comment,index) => (
+                <div key={index} className="my-1 2xl:my-[60px] 3xl:my-[80px]">
                 <div>
                   <div
-                    className="border-[1px] border-lightGray dark:border-gray rounded-sm p-4 sm:p-5 md:p-6 2xl:p-[30px]"
+                    className="border-[1px] border-lightGray dark:border-gray rounded-sm p-3 sm:p-3 md:p-3 2xl:p-[15px]"
                     data-aos="fade-up"
                     data-aos-duration="1000"
                   >
                     <div className="grid gap-3 sm:flex md:grid md:gap-5 lg:flex ">
                       <img
-                        src="/images/inner/blog-details-author-2.png"
+                        src={`http://127.0.0.1:8000${comment.image}`}
                         alt=""
                         className="w-[70px]  h-[70px] "
                       />
@@ -241,11 +295,11 @@ const BlogDetails = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
                             <span className="text-base sm:text-lg lg:text-xl font-Garamond font-semibold leading-6 md:leading-7 text-lightBlack dark:text-white">
-                              Moris Barbar
+                              {comment.author}
                             </span>
                             <hr className="w-[10px] sm:w-[27px] h-[1px] text-lightBlack dark:text-white mx-1 sm:mx-2 " />
                             <span className="text-[13px] sm:text-[15px] font-Lora font-normal text-gray dark:text-lightGray">
-                              August 10, 2023
+                              {comment.date}
                             </span>
                           </div>
                           <span className="text-[13px] sm:text-[15px] font-Lora font-normal text-gray dark:text-lightGray cursor-pointer">
@@ -253,55 +307,14 @@ const BlogDetails = () => {
                           </span>
                         </div>
                         <p className="text-sm sm:text-[15px] font-Lora font-normal text-gray dark:text-lightGray mt-3 xl:mt-[15px]">
-                          Interactively visualize top-line internal or "organic"
-                          sources rather than top-line niche mark unleash 24/7
-                          opportunities after high standards in process
-                          improvements. Uniquely deploy methodologies with
-                          reliable information.{" "}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  {/* comment -2 */}
-                  <div
-                    className="border-[1px] border-lightGray dark:border-gray rounded-sm p-4 sm:p-5 md:p-6 2xl:p-[30px] ml-0 lg:ml-10 3xl:ml-14  mt-5"
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                  >
-                    <div className="grid gap-3 sm:flex md:grid md:gap-5 lg:flex ">
-                      <img
-                        src="/images/inner/blog-details-author-1.png"
-                        alt=""
-                        className="w-[70px]  h-[70px] "
-                      />
-
-                      <div className="ml-3 2xl:ml-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <span className="text-base sm:text-lg lg:text-xl font-Garamond font-semibold leading-6 md:leading-7 text-lightBlack dark:text-white">
-                              Moris Barbar
-                            </span>
-                            <hr className="w-[10px] sm:w-[27px] h-[1px] text-lightBlack dark:text-white mx-1 sm:mx-2 " />
-                            <span className="text-[13px] sm:text-[15px] font-Lora font-normal text-gray dark:text-lightGray">
-                              August 10, 2023
-                            </span>
-                          </div>
-                          <span className="text-[13px] sm:text-[15px] font-Lora font-normal text-gray dark:text-lightGray cursor-pointer">
-                            REPLY
-                          </span>
-                        </div>
-                        <p className="text-sm sm:text-[15px] font-Lora font-normal text-gray dark:text-lightGray mt-3 xl:mt-[15px]">
-                          Interactively visualize top-line internal or "organic"
-                          sources rather than top-line niche mark unleash 24/7
-                          opportunities after high standards in process
-                          improvements. Uniquely deploy methodologies with
-                          reliable information.{" "}
+                          {comment.text}{" "}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              )) : <p>No Comments</p>}
               {/* Comment form */}
               <div data-aos="fade-up" data-aos-duration="1000">
                 <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-[32px] text-lightBlack dark:text-white font-semibold font-Garamond mb-5 2xl:mb-[30px]">
@@ -365,6 +378,8 @@ const BlogDetails = () => {
         </div>
       </div>
     </div>
+      </> : <p>Loading...</p>}
+    </>
   );
 };
 

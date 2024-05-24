@@ -6,9 +6,59 @@ import { BiChevronDown, BiSun } from "react-icons/bi";
 import { RiHomeOfficeFill } from "react-icons/ri";
 import { IoMoonSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
+import Modal from "../Modal/Modal";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setMessage, loggedout, setUser } from "../../Redux/features/userSlice";
+
 
 const Navbar = () => {
+
+  const isLoggedIn = useSelector(state => state.user.isLogged)
+  console.log(isLoggedIn);
+
+  const [refresh, setRefresh] = useState(false)
+
+  const dispatch = useDispatch()
+  // const utilisateur = useSelector(state => state.user.user)
+  
+  const logout = () => {
+    localStorage.removeItem("access_token")
+    axios.post('http://127.0.0.1:8000/api/logout/')
+        .then(response => { 
+            dispatch(setMessage({ message: response.data.message }))
+            dispatch(loggedout())
+        })
+        .catch(error => { console.log(error) })
+    console.log("logout");
+  }
+
+  useEffect(() => {
+    try {
+        const token = localStorage.getItem("access_token")
+        axios.get('http://127.0.0.1:8000/api/get_user/', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                console.log("test");
+                console.log(response.data.user);
+                dispatch(setUser(response.data.user))
+            })
+
+    } catch (error) {
+        console.log(error);
+    }
+}, [])
+
+console.log(isLoggedIn);
+const utilisateur = useSelector(state => state.user.user)
+console.log(utilisateur);
+
   // modal openar
+  const [openModal, setOpenModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   // dark mode toggle bar
   const [isDarkMode, setIsDarkMode] = useState(
@@ -201,13 +251,6 @@ const Navbar = () => {
                       </NavLink>
                     </li>
                   </div>
-                  <div className=" px-5 group hover:bg-khaki hover:text-white">
-                    <li className="hover:ml-3 duration-300  ">
-                      <NavLink to="/room_details" className="block py-2">
-                        Room Details
-                      </NavLink>
-                    </li>
-                  </div>
                 </ul>
               </div>
             </NavLink>
@@ -237,13 +280,6 @@ const Navbar = () => {
                     <li className="hover:ml-3 duration-300  ">
                       <NavLink to="/services" className="py-2 block">
                         SERVICE
-                      </NavLink>
-                    </li>
-                  </div>
-                  <div className=" px-5 group hover:bg-khaki hover:text-white">
-                    <li className="hover:ml-3 duration-300  ">
-                      <NavLink to="/service_details" className="py-2 block">
-                        SERVICE DETAILS
                       </NavLink>
                     </li>
                   </div>
@@ -287,13 +323,6 @@ const Navbar = () => {
                       </NavLink>
                     </li>
                   </div>
-                  <div className=" px-5 group hover:bg-khaki hover:text-white">
-                    <li className="hover:ml-3 duration-300 ">
-                      <NavLink to="/blog_details" className="py-2 block">
-                        BLOG DETAILS
-                      </NavLink>
-                    </li>
-                  </div>
                 </ul>
               </div>
             </NavLink>
@@ -330,9 +359,17 @@ const Navbar = () => {
             <Link to="/find_room">
               <button className="btn-secondary ">Booking Online</button>
             </Link>
-            <Link to='/backoffice'>
+            {isLoggedIn && utilisateur.role === "admin" ? <><Link to='/backoffice'>
               <button className="btn-secondary-bis ">Back Office</button>
             </Link>
+            <i onClick={logout} className="gg-log-out logout-icon"></i></> : isLoggedIn && utilisateur.role === "webmaster" ? <><Link to='/backoffice/employees'>
+              <button className="btn-secondary-bis ">Back Office</button>
+            </Link>
+            <i onClick={logout} className="gg-log-out logout-icon"></i></> : isLoggedIn && utilisateur.role === "redacteur" ? <><Link to='/backoffice/blog'>
+              <button className="btn-secondary-bis ">Back Office</button>
+            </Link>
+            <i onClick={logout} className="gg-log-out logout-icon"></i></> : isLoggedIn ? <><button onClick={logout} className="btn-secondary-bis ">Log Out</button></> : <><button onClick={() => setOpenModal(true)} className="btn-secondary-login ">Log In</button> </>}
+            {openModal ? <Modal setRefresh={setRefresh} refresh={refresh} setOpenModal={setOpenModal} /> : null}
           </div>
         </div>
       </div>

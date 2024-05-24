@@ -1,10 +1,28 @@
 import { MdEmail, MdOutlineShareLocation } from "react-icons/md";
 import BreadCrumb from "../../BreadCrumb/BreadCrumb";
 import { IoIosCall } from "react-icons/io";
+import { useState,useEffect } from "react";
+import axios from "axios";
 
 const Contact = () => {
+
+  const [contact, setContact] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/contact/")
+      .then((response) => { 
+        if (response.data.contact) {
+          setContact(response.data.contact);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
-    <div>
+    <>
+      {contact ? <div>
       <BreadCrumb title="Contact " />
 
       {/* Contact */}
@@ -43,7 +61,7 @@ const Contact = () => {
                     Call Us Now
                   </p>
                   <p className="font-Garamond text-lg sm:text-xl md:text-[22px] leading-[26px] text-lightBlack dark:text-white font-medium">
-                    +980 123 (4567) 890
+                    {contact.tel}
                   </p>
                 </div>
               </div>
@@ -61,7 +79,7 @@ const Contact = () => {
                     Send Email
                   </p>
                   <p className="font-Garamond text-lg sm:text-xl md:text-[22px] leading-[26px] text-lightBlack dark:text-white font-medium ">
-                    example@gmail.com
+                    {contact.email}
                   </p>
                 </div>
               </div>
@@ -79,8 +97,7 @@ const Contact = () => {
                     Our Locations
                   </p>
                   <p className="font-Garamond text-lg sm:text-xl md:text-[22px] leading-[26px] text-lightBlack dark:text-white font-medium ">
-                    New elephant Road, Dhanmondi <br />
-                    Dhaka - 1212
+                    {contact.location}
                   </p>
                 </div>
               </div>
@@ -173,14 +190,15 @@ const Contact = () => {
       {/* google map */}
       <div data-aos="fade-down" data-aos-duration="1000">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387190.279909073!2d-74.25987368715491!3d40.69767006458873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1633418400558!5m2!1sen!2sbd"
-          height={450}
+          src={contact.maps}
+          style={{ border: 0, width: "100%", height: "100%" }}
           allowFullScreen=""
           loading="lazy"
           className="w-full"
         ></iframe>
       </div>
-    </div>
+    </div> : <></>}
+    </>
   );
 };
 

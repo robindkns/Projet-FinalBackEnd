@@ -1,0 +1,97 @@
+.backoffice
+    font-family: "Lora", serif
+    h1
+        font-size: 40px
+        color: #c19d68
+    h3
+        color: #c19d68
+        font-size: 30px
+        text-decoration: underline
+
+.backoffice-header
+    display: flex
+    justify-content: space-between
+    width: 100%
+    align-items: center
+
+.backoffice-content
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+
+.table-container
+    display: flex
+    justify-content: center
+    width: 100%
+
+table
+    margin-top: 30px
+    width: 100%
+    display: flex
+    flex-direction: column
+    thead
+        display: flex
+        width: 100%
+        justify-content: space-evenly
+        color: #c19d68
+        tr
+            width: 28%
+            font-weight: bold
+            text-align: center  
+            border: 1px solid #c19d68
+    tbody 
+        width: 100%
+        display: flex
+        flex-direction: column
+        tr
+            display: flex
+            width: 100%
+            justify-content: space-evenly
+            color: white
+            border: 0.5px solid #c19d68
+            td
+                width: 28%
+                display: flex
+                justify-content: center
+                align-items: center
+            th
+                width: 28%
+                display: flex
+                justify-content: center
+                align-items: center
+
+.last-col
+    width: 8%
+
+.first-col
+    width: 8%
+
+.modifs-col
+    display: flex
+    flex-direction: column
+    gap: 30px
+    &:hover
+        cursor: pointer
+
+.add
+    color: #77ba6b
+    font-weight: bold
+    border: 1px solid #77ba6b
+    padding-inline: 10px
+    padding-block: 5px
+    text-decoration: none
+    &:hover
+        background-color: #77ba6b
+        color: white
+
+.edit
+    color: #588cba
+    &:hover
+        color: #3e6a9e
+        cursor: pointer
+
+.delete
+    color: #c15a5a
+    &:hover
+        color: #9e3f3f
+        cursor: pointer

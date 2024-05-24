@@ -1,10 +1,29 @@
 import { BsCheck2 } from "react-icons/bs";
 import BreadCrumb from "../../BreadCrumb/BreadCrumb";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ServiceDetails = () => {
 
+  const [service, setService] = useState(null);
+  const { id } = useParams()
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/services/")
+      .then((response) => { 
+        if (response.data.services) {
+          let services = response.data.services;
+          setService(services.filter(service => service.id == id)[0]);
+        }})
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
-    <section className="">
+    <>
+      {service ? <section className="">
       <BreadCrumb title="Service Details" />
 
       {/* Service Details content */}
@@ -17,7 +36,7 @@ const ServiceDetails = () => {
               data-aos="zoom-in-up"
               data-aos-duration="1000"
             >
-              <img src="/images/inner/service-details.jpg" alt="" />
+              <img src={`http://127.0.0.1:8000${service.image}`} alt="" />
             </div>
             <div className="col-span-6 md:col-span-3 lg:col-span-2">
               <div className=" bg-whiteSmoke dark:bg-normalBlack px-7 py-8 md:px-5 md:py-10 lg:px-6 lg:py-11 2xl:px-10 2xl:py-[50px]  grid-flow-row-dense">
@@ -60,20 +79,12 @@ const ServiceDetails = () => {
 
           {/* Restaurants center */}
           <div className="pt-5 lg:pt-[35px]  pr-3">
-            <p className="text-base font-Lora text-khaki">FOODS</p>
+            <p className="text-base font-Lora text-khaki">{service.theme}</p>
             <h2 className="py-2 sm:py-3 md:py-4 lg:py-[19px] 2xl:py-[25px] font-Garamond text-[22px] sm:text-2xl md:text-3xl lg:text-4xl 2xl:text-[38px] 3xl:text-[40px] leading-6 lg:leading-[26px]  text-lightBlack dark:text-white font-semibold">
-              The Restaurant Center
+              {service.title}
             </h2>
             <p className="text-sm lg:text-base leading-6 text-gray dark:text-lightGray font-normal font-Lora">
-              Rapidiously myocardinate cross-platform intellectual capital after
-              marketing model. Appropriately create interactive infrastructures
-              after maintainable are Holisticly facilitate stand-alone inframe
-              extend state of the art benefits via web-enabled value. Completely
-              fabricate extensible infomediaries rather than reliable
-              e-services. Dramatically whiteboard alternative Conveniently
-              fashion pandemic potentialities for team driven technologies.
-              Proactively orchestrate robust systems rather than user-centric
-              vortals. Distinctively seize top-line e-commerce with premier
+              {service.description}
             </p>
 
             {/* Restaurant Rules */}
@@ -172,7 +183,8 @@ const ServiceDetails = () => {
         </div>
       </div>
 
-    </section>
+    </section> : <p>Loading ...</p>}
+    </>
   );
 };
 

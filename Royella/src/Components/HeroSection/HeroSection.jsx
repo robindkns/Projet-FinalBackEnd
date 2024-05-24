@@ -20,7 +20,6 @@ const HeroSection = () => {
     axios.get("http://127.0.0.1:8000/api/home/")
     .then((response) => {
       setBanners(response.data.banner);
-      console.log(banners);  
     })
     .catch((error) => {
       console.log(error);

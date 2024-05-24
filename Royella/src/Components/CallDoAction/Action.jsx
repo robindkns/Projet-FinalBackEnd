@@ -1,10 +1,43 @@
 import { BsPlay } from "react-icons/bs";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from "axios";
 import FsLightbox from "fslightbox-react";
 const Action = () => {
+
+  const [hotel,setHotel] = useState(null);
+  const [manager,setManager] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/hotel/")
+      .then((response) => { 
+        if (response.data.hotels) {
+          setHotel(response.data.hotels);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/manager/")
+      .then((response) => { 
+        if (response.data.manager) {
+          setManager(response.data.manager);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+
+
+  //TEMPLATE DATA
   const [toggler, setToggler] = useState(false);
   return (
-    <div className="dark:bg-mediumBlack dark:z-[-1]">
+    <>
+      {hotel ? <div className="dark:bg-mediumBlack dark:z-[-1]">
       <section className="Container mt-[-90px] dark:z-[1]">
         <div className=" w-full grid grid-cols-1 lg:grid-cols-2 items-center ">
           <div
@@ -16,34 +49,33 @@ const Action = () => {
               MANAGER
             </h5>
             <h1 className="text-[22px] sm:text-2xl md:text-[28px] xl:text-[32px] 2xl:text-[38px] leading-[38px] lg:leading-[44px] text-lightBlack dark:text-white font-semibold">
-              LUXURY BEST HOTEL IN CITY CALIFORNIA, USA
+              {hotel.title}
             </h1>
             <p className="text-sm sm:text-base font-Lora text-gray dark:text-lightGray font-normal leading-[26px]">
-              Rapidiously myocardinate cross-platform intellectual capital after
-              model. Appropriately create interactive infrastructures after main
-              Holisticly facilitate stand-alone inframe
+              {hotel.description}
             </p>
+            {manager ? <>
             <p className="text-sm sm:text-base font-Lora italic leading-[26px] underline  text-gray dark:text-lightGray font-normal ">
-              “ Model. Appropriately create interactive infrastructures after
-              main Holisticly facilitate stand-alone inframe of the world ”
+              {manager.quote}
             </p>
             <div className="flex items-center space-x-6 pt-5">
               <img
-                src="/images/home-1/call-do-action-img.png"
+                src={`http://127.0.0.1:8000${manager.image}`}
                 className="w-[65px] h-[65px] object-cover"
                 alt=""
               />
 
               <div className="">
                 <h4 className="text-lg sm:text-[22px] leading-[26px] text-lightBlack dark:text-white font-semibold font-Garamond">
-                  John D. Alexon
+                  {manager.name}
                 </h4>
                 <p className="pt-1 text-base leading-[26px] font-normal text-gray dark:text-lightGray flex items-center font-Lora">
                   <span className="w-5 h-[1px] inline-block text-khaki bg-khaki mr-2"></span>
-                  Manger
+                  {manager.poste}
                 </p>
               </div>
             </div>
+            </> : <p>Loading...</p>}
           </div>
           <div
             className="flex-1 h-[100%] w-full relative "
@@ -51,7 +83,7 @@ const Action = () => {
             data-aos-duration="1000"
           >
             <img
-              src="/images/home-1/action-img.png"
+              src={`http://127.0.0.1:8000${hotel.image}`}
               className="h-full w-full md:h-[80%] lg:h-full 2xl:h-[99%] "
               alt=""
             />
@@ -66,11 +98,12 @@ const Action = () => {
           </div>
           <FsLightbox
             toggler={toggler}
-            sources={["https://youtu.be/fFDyoI73viQ?si=GbDzAagjoa_0Nv2x"]}
+            sources={[hotel.video]}
           />
         </div>
       </section>
-    </div>
+    </div> : <p>Loading...</p>}
+    </>
   );
 };
 

@@ -1,8 +1,25 @@
 import { FaFacebookF, FaLinkedinIn, FaPinterestP } from "react-icons/fa";
 import BreadCrumb from "../../BreadCrumb/BreadCrumb";
 import { BsTwitter } from "react-icons/bs";
+import { useState,useEffect } from "react";
+import axios from "axios";
 
 const Team = () => {
+
+  const [employees,setEmployees] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/employees/")
+      .then((response) => { 
+        if (response.data.employees && response.data.employees.length > 0) {
+          setEmployees(response.data.employees);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <BreadCrumb title="our team" />
@@ -35,24 +52,26 @@ const Team = () => {
           {/* Section Content */}
           <div className="mt-[60px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-5 lg:gap-[30px] ">
             {/* Member one */}
-            <div
+            {employees ? employees.map((employee,index) => (
+              <>
+              <div key={index}
               className="member group"
               data-aos="zoom-in-up"
               data-aos-duration="1000"
             >
-              <img src="/images/inner/member-1.jpg" className="w-full" alt="" />
+              <img src={`http://127.0.0.1:8000${employee.image}`} className="w-full" alt="" />
               <div className="relative">
                 <div className="px-4  lg:px-[30px] pt-5 ">
                   <h3 className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] leading-7 md:leading-8 lg:leading-10 text-lightBlack dark:text-white font-semibold font-Garamond text-center hover:opacity-0">
-                    Valentina Kerry
+                    {employee.name}
                   </h3>
                   <p className="text-sm md:text-base leading-[26px] text-Gray dark:text-lightGray font-normal font-Lora text-center group-hover:text-white dark:hover:text-white hover:opacity-0">
-                    General Manager
+                    {employee.poste}
                   </p>
                 </div>
                 <div
                   className="p-[30px] bg-khaki grid items-center justify-center absolute bottom-[-150px] sm:bottom-[-170px] md:bottom-[-150px] group-hover:bottom-[-38px] lg:group-hover:bottom-[-30px] transition-all
-                 duration-500 left-0 right-0"
+                  duration-500 left-0 right-0"
                 >
                   <div className="flex items-center justify-center space-x-4 text-white">
                     <FaFacebookF className="" />
@@ -61,171 +80,14 @@ const Team = () => {
                     <FaPinterestP className="" />
                   </div>
                   <p className="text-white font-medium leading-10 text-xl lg:text-[22px] font-Garamond">
-                    example@gmail.com
+                    {employee.email}
                   </p>
                 </div>
               </div>
             </div>
-            {/* Member two */}
-            <div
-              className="member group"
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-            >
-              <img src="/images/inner/member-2.jpg" className="w-full" alt="" />
-              <div className="relative">
-                <div className="px-4  lg:px-[30px] pt-5 ">
-                  <h3 className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] leading-7 md:leading-8 lg:leading-10 text-lightBlack dark:text-white font-semibold font-Garamond text-center hover:opacity-0">
-                    Leary Mart
-                  </h3>
-                  <p className="text-sm md:text-base leading-[26px] text-Gray dark:text-lightGray font-normal font-Lora text-center group-hover:text-white dark:hover:text-white hover:opacity-0">
-                    Product Manager
-                  </p>
-                </div>
-                <div
-                  className="p-[30px] bg-khaki grid items-center justify-center absolute bottom-[-150px] sm:bottom-[-170px] md:bottom-[-150px] group-hover:bottom-[-38px] lg:group-hover:bottom-[-30px] transition-all
-                 duration-500 left-0 right-0"
-                >
-                  <div className="flex items-center justify-center space-x-4 text-white">
-                    <FaFacebookF className="" />
-                    <BsTwitter className="" />
-                    <FaLinkedinIn className="" />
-                    <FaPinterestP className="" />
-                  </div>
-                  <p className="text-white font-medium leading-10 text-xl lg:text-[22px] font-Garamond">
-                    example@gmail.com
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Member three */}
-            <div
-              className="member group"
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-            >
-              <img src="/images/inner/member-3.jpg" className="w-full" alt="" />
-              <div className="relative">
-                <div className="px-4  lg:px-[30px] pt-5 ">
-                  <h3 className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] leading-7 md:leading-8 lg:leading-10 text-lightBlack dark:text-white font-semibold font-Garamond text-center hover:opacity-0">
-                    Samantha Shen
-                  </h3>
-                  <p className="text-sm md:text-base leading-[26px] text-Gray dark:text-lightGray font-normal font-Lora text-center group-hover:text-white dark:hover:text-white hover:opacity-0">
-                    General Manager
-                  </p>
-                </div>
-                <div
-                  className="p-[30px] bg-khaki grid items-center justify-center absolute bottom-[-150px] sm:bottom-[-170px] md:bottom-[-150px] group-hover:bottom-[-38px] lg:group-hover:bottom-[-30px] transition-all
-                 duration-500 left-0 right-0"
-                >
-                  <div className="flex items-center justify-center space-x-4 text-white">
-                    <FaFacebookF className="" />
-                    <BsTwitter className="" />
-                    <FaLinkedinIn className="" />
-                    <FaPinterestP className="" />
-                  </div>
-                  <p className="text-white font-medium leading-10 text-xl lg:text-[22px] font-Garamond">
-                    example@gmail.com
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Member four */}
-            <div
-              className="member group"
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-            >
-              <img src="/images/inner/member-1.jpg" className="w-full" alt="" />
-              <div className="relative">
-                <div className="px-4  lg:px-[30px] pt-5 ">
-                  <h3 className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] leading-7 md:leading-8 lg:leading-10 text-lightBlack dark:text-white font-semibold font-Garamond text-center hover:opacity-0">
-                    Amanda Z. Web
-                  </h3>
-                  <p className="text-sm md:text-base leading-[26px] text-Gray dark:text-lightGray font-normal font-Lora text-center group-hover:text-white dark:hover:text-white hover:opacity-0">
-                    Marketing Manger
-                  </p>
-                </div>
-                <div
-                  className="p-[30px] bg-khaki grid items-center justify-center absolute bottom-[-150px] sm:bottom-[-170px] md:bottom-[-150px] group-hover:bottom-[-38px] lg:group-hover:bottom-[-30px] transition-all
-                 duration-500 left-0 right-0"
-                >
-                  <div className="flex items-center justify-center space-x-4 text-white">
-                    <FaFacebookF className="" />
-                    <BsTwitter className="" />
-                    <FaLinkedinIn className="" />
-                    <FaPinterestP className="" />
-                  </div>
-                  <p className="text-white font-medium leading-10 text-xl lg:text-[22px] font-Garamond">
-                    example@gmail.com
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Member five */}
-            <div
-              className="member group"
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-            >
-              <img src="/images/inner/member-4.jpg" className="w-full" alt="" />
-              <div className="relative">
-                <div className="px-4  lg:px-[30px] pt-5 ">
-                  <h3 className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] leading-7 md:leading-8 lg:leading-10 text-lightBlack dark:text-white font-semibold font-Garamond text-center hover:opacity-0">
-                    Henry K. Hamar
-                  </h3>
-                  <p className="text-sm md:text-base leading-[26px] text-Gray dark:text-lightGray font-normal font-Lora text-center group-hover:text-white dark:hover:text-white hover:opacity-0">
-                    Product Manager
-                  </p>
-                </div>
-                <div
-                  className="p-[30px] bg-khaki grid items-center justify-center absolute bottom-[-150px] sm:bottom-[-170px] md:bottom-[-150px] group-hover:bottom-[-38px] lg:group-hover:bottom-[-30px] transition-all
-                 duration-500 left-0 right-0"
-                >
-                  <div className="flex items-center justify-center space-x-4 text-white">
-                    <FaFacebookF className="" />
-                    <BsTwitter className="" />
-                    <FaLinkedinIn className="" />
-                    <FaPinterestP className="" />
-                  </div>
-                  <p className="text-white font-medium leading-10 text-xl lg:text-[22px] font-Garamond">
-                    example@gmail.com
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Member six */}
-            <div
-              className="member group"
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-            >
-              <img src="/images/inner/member-6.jpg" className="w-full" alt="" />
-              <div className="relative">
-                <div className="px-4  lg:px-[30px] pt-5 ">
-                  <h3 className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] leading-7 md:leading-8 lg:leading-10 text-lightBlack dark:text-white font-semibold font-Garamond text-center hover:opacity-0">
-                    Diana R. Newell
-                  </h3>
-                  <p className="text-sm md:text-base leading-[26px] text-Gray dark:text-lightGray font-normal font-Lora text-center group-hover:text-white dark:hover:text-white hover:opacity-0">
-                    Marketing Manager
-                  </p>
-                </div>
-                <div
-                  className="p-[30px] bg-khaki grid items-center justify-center absolute bottom-[-150px] sm:bottom-[-170px] md:bottom-[-150px] group-hover:bottom-[-38px] lg:group-hover:bottom-[-30px] transition-all
-                 duration-500 left-0 right-0"
-                >
-                  <div className="flex items-center justify-center space-x-4 text-white">
-                    <FaFacebookF className="" />
-                    <BsTwitter className="" />
-                    <FaLinkedinIn className="" />
-                    <FaPinterestP className="" />
-                  </div>
-                  <p className="text-white font-medium leading-10 text-xl lg:text-[22px] font-Garamond">
-                    example@gmail.com
-                  </p>
-                </div>
-              </div>
-            </div>
+            </>
+            )) : <p>Loading...</p>}
+
           </div>
         </div>
       </div>

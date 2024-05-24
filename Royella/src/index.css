@@ -8,7 +8,7 @@
 */
 /* Google Fonts Link */
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 /* Tailwind  layer configure */
 @tailwind base;
 @tailwind components;
@@ -50,6 +50,10 @@
 
 .btn-secondary-bis {
   @apply border border-white w-[145px] sm:w-[75px] lg:w-[90px] 2xl:w-[115px] 3xl:w-[120px] h-[48px] lg:h-[52px] 2xl:h-[60px] relative before:w-8 before:h-[1px] before:bg-white before:absolute before:left-0  md:before:top-[60px] lg:before:top-[65px] 2xl:before:top-[70px] text-white uppercase text-sm lg:text-base font-medium font-Garamond hover-animBg after:rounded-none hover:border-khaki hover:before:bg-khaki transition-all duration-300;
+}
+
+.btn-secondary-login {
+  @apply border border-white w-[130px] sm:w-[50px] lg:w-[75px] 2xl:w-[90px] 3xl:w-[105px] h-[48px] lg:h-[52px] 2xl:h-[60px] relative before:w-8 before:h-[1px] before:bg-white before:absolute before:left-0  md:before:top-[60px] lg:before:top-[65px] 2xl:before:top-[70px] text-white uppercase text-sm lg:text-base font-medium font-Garamond hover-animBg after:rounded-none hover:border-khaki hover:before:bg-khaki transition-all duration-300;
 }
 
 .btn-items {
@@ -172,6 +176,13 @@ option:hover {
   height: 320px;
 }
 
+.img-random-offers{
+  width: 300px;
+  height: 330px;
+}
+
+
+
 .room-details-img{
   width: 100%;
 }
@@ -184,4 +195,93 @@ option:hover {
   width: 40px;
   display: flex;
   justify-content: center;
+}
+
+.p-location{
+  width: 75%;
+  display: flex;
+  justify-content: center;
+}
+
+.div-location{
+  display: flex;
+  justify-content: center;
+}
+
+.icon-facility-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+
+.icon-facility{
+  color: #c19d68;
+}
+
+.testi-img{
+  width: 80px;
+  height: 80px;
+}
+
+.li-testi{
+  list-style-type: none;
+}
+
+.img-blog{
+  width: 410px;
+  height: 350px;
+}
+
+.logout-icon{
+  color: white;
+  scale: 1.5;
+}
+
+.logout-icon:hover{
+  color: #c19d68;
+}
+
+.messages{
+  position: fixed;
+  bottom: 2%;
+  right: 1%;
+  width: 400px;
+  height: 100px;
+  background-color: #c19d68b0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  color: white;
+  font-family: Cormorant Garamond, serif;
+  animation: pop-up 0.6s ease-in forwards;
+}
+
+.message-close{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #c4c4c4;
+  transition: all 0.3s ease;
+}
+
+.message-close:hover{
+  cursor: pointer;
+  color: white;
+}
+
+@keyframes pop-up{
+  0%{
+    transform: scale(0);
+  }
+  100%{
+    transform: scale(1);
+  }
 }

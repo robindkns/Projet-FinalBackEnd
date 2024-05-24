@@ -24,6 +24,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('home.urls')),
     path('api/', include('rooms.urls')),
+    path('api/', include('hotel.urls')),
+    path('api/', include('facilities.urls')),
+    path('api/', include('services.urls')),
+    path('api/', include('contact.urls')),
+    path('api/', include('employees.urls')),
+    path('api/', include('testimonial.urls')),
+    path('api/', include('pricing.urls')),
+    path('api/', include('blog.urls')),
+    path('api/', include('authentification.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
