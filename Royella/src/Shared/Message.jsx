@@ -1,7 +1,17 @@
+import { useDispatch } from "react-redux";
+import { setMessage } from "../Redux/features/userSlice";
+
 export default function Message(props) {
 
+    const dispatch = useDispatch()
+
+
     const handleMessage = () => {
-        props.setOpenMessage(false)
+        dispatch(setMessage({message: ''}))
+        // props.setOpenMessage(false)
+        setTimeout(() => {
+            props.setOpenMessage(false)
+        } , 10)
     }
 
     return (

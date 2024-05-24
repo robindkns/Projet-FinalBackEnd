@@ -55,6 +55,7 @@ import CreateBlog from "../BackOffice/Components/BlogBO/CreateBlog/CreateBlog";
 import TestimonialBO from "../BackOffice/Components/TestimonialBO/TestimonialBO";
 import CreateTestimonial from "../BackOffice/Components/TestimonialBO/CreateTestimonial/CreateTestimonial";
 import UsersBO from "../BackOffice/Components/UsersBO/UsersBO";
+import UpdateBlog from "../BackOffice/Components/BlogBO/UpdateBlog/UpdateBlog";
 
 // Starting React Router.
 const router = createBrowserRouter([
@@ -205,6 +206,10 @@ const router = createBrowserRouter([
       {
         path : '/backoffice/users',
         element : <UsersBO/>
+      },
+      {
+        path : '/backoffice/blogs/update/:id',
+        element : <UpdateBlog/>
       }
     ],
   },

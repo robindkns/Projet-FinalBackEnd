@@ -273,9 +273,9 @@ const BlogDetails = () => {
                 </div>
               </div>
               {/* Comment Section */}
-              <h3 className="pt-10 text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-[32px] text-lightBlack dark:text-white font-semibold font-Garamond mb-5 2xl:mb-[30px]">
+              {comments ? <h3 className="pt-10 text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-[32px] text-lightBlack dark:text-white font-semibold font-Garamond mb-5 2xl:mb-[30px]">
                   ‘{comments.length}’ Comments
-              </h3>
+              </h3> : <p>Loading...</p> }
               {comments ? comments.map((comment,index) => (
                 <div key={index} className="my-1 2xl:my-[60px] 3xl:my-[80px]">
                 <div>

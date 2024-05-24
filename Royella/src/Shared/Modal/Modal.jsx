@@ -57,6 +57,7 @@ export default function Modal(props){
         } else {
             dispatch(setMessage({message: response.data.message}))
         }
+        
     }
 
     const change = (e) => {

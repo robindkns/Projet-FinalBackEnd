@@ -22,7 +22,6 @@ const LatestBlog = () => {
         if (response.data.blogs && response.data.categories) {
           setCategories(response.data.categories);
           setBlogs(sortBlogs(response.data.blogs));
-          console.log(blogs);  
         }
       })
       .catch((error) => {

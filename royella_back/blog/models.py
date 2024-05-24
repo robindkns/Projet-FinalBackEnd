@@ -15,7 +15,7 @@ class Category(models.Model):
 class Blog(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images/', null=True)
     text = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag)

@@ -12,6 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BlogSerializer(serializers.ModelSerializer):
+    tag = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all())
     class Meta:
         model = Blog
         fields = '__all__'

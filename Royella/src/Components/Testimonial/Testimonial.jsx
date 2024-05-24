@@ -4,8 +4,8 @@ import { useKeenSlider } from "keen-slider/react";
 import "../../Components4/Testimonial/testimonials.css";
 import "keen-slider/keen-slider.min.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../Redux/features/userSlice";
 
 const Testimonial = () => {
@@ -39,8 +39,6 @@ const Testimonial = () => {
             }
         })
             .then(response => {
-                console.log("test");
-                console.log(response.data.user);
                 dispatch(setUser(response.data.user))
             })
 
@@ -48,8 +46,6 @@ const Testimonial = () => {
         console.log(error);
     }
 }, [])
-
-  const user = useSelector(state => state.user.user)
 
   useEffect(() => {
     let randomTestiEffect = [];

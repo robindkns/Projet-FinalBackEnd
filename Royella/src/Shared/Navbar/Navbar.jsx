@@ -17,11 +17,11 @@ const Navbar = () => {
 
   const isLoggedIn = useSelector(state => state.user.isLogged)
   console.log(isLoggedIn);
+  const [utilisateur, setUtilisateur] = useState(null)
 
   const [refresh, setRefresh] = useState(false)
 
   const dispatch = useDispatch()
-  // const utilisateur = useSelector(state => state.user.user)
   
   const logout = () => {
     localStorage.removeItem("access_token")
@@ -43,9 +43,8 @@ const Navbar = () => {
             }
         })
             .then(response => {
-                console.log("test");
-                console.log(response.data.user);
                 dispatch(setUser(response.data.user))
+                setUtilisateur(response.data.user)
             })
 
     } catch (error) {
@@ -53,9 +52,11 @@ const Navbar = () => {
     }
 }, [])
 
-console.log(isLoggedIn);
-const utilisateur = useSelector(state => state.user.user)
-console.log(utilisateur);
+
+
+// console.log(isLoggedIn);
+// const utilisateur = useSelector(state => state.user.user)
+// console.log(utilisateur);
 
   // modal openar
   const [openModal, setOpenModal] = useState(false);
@@ -87,6 +88,7 @@ console.log(utilisateur);
       document.documentElement.classList.remove("dark");
     }
   }, [isDarkMode]);
+
 
   return (
     <nav
@@ -359,7 +361,7 @@ console.log(utilisateur);
             <Link to="/find_room">
               <button className="btn-secondary ">Booking Online</button>
             </Link>
-            {isLoggedIn && utilisateur.role === "admin" ? <><Link to='/backoffice'>
+            {isLoggedIn && utilisateur && utilisateur.role === "admin" ? <><Link to='/backoffice'>
               <button className="btn-secondary-bis ">Back Office</button>
             </Link>
             <i onClick={logout} className="gg-log-out logout-icon"></i></> : isLoggedIn && utilisateur.role === "webmaster" ? <><Link to='/backoffice/employees'>
